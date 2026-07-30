@@ -1562,12 +1562,19 @@
     document.addEventListener('DOMContentLoaded', () => {
       const bgVideo = document.getElementById('hero-bg-video');
       if (bgVideo) {
-        // If the browser pauses the video, attempt to resume it
+        // 1. If the browser pauses the video, attempt to resume it
         bgVideo.addEventListener('pause', () => {
           bgVideo.play().catch(e => console.log('Video autoplay prevented:', e));
         });
         
-        // Also ensure video plays on first user interaction
+        // 2. Resume video when user comes back to this tab
+        document.addEventListener('visibilitychange', () => {
+          if (document.visibilityState === 'visible' && bgVideo.paused) {
+            bgVideo.play().catch(e => console.log('Video play prevented on tab switch:', e));
+          }
+        });
+
+        // 3. Ensure video plays on first user interaction
         document.body.addEventListener('click', () => {
           if (bgVideo.paused) {
             bgVideo.play().catch(e => console.log('Video play prevented:', e));
