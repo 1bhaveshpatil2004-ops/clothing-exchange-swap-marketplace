@@ -377,7 +377,7 @@ app.post('/api/login', async (req, res) => {
 // FRONTEND ROUTE
 // ==========================================
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'frontend.html'));
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 // Start Express Server (Local Development)
