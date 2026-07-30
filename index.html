@@ -313,7 +313,7 @@
     <section
       class="relative min-h-[450px] lg:min-h-[400px] rounded-3xl overflow-hidden bg-black text-white flex items-center px-8 lg:px-16 shadow-2xl">
 
-      <video autoplay loop muted playsinline
+      <video id="hero-bg-video" autoplay loop muted playsinline webkit-playsinline
         class="absolute inset-0 w-full h-full object-cover opacity-80 pointer-events-none z-0">
         <source src="./all photos/WhatsApp%20Video%202026-07-26%20at%208.30.59%20PM.mp4" type="video/mp4">
         Your browser does not support the video tag.
@@ -1557,6 +1557,24 @@
       // Set the clicked button to active state
       btn.className = 'size-btn w-10 h-10 rounded-full border border-white bg-white text-black flex items-center justify-center text-xs font-bold transition';
     }
+
+    // --- Fix for Background Video randomly pausing ---
+    document.addEventListener('DOMContentLoaded', () => {
+      const bgVideo = document.getElementById('hero-bg-video');
+      if (bgVideo) {
+        // If the browser pauses the video, attempt to resume it
+        bgVideo.addEventListener('pause', () => {
+          bgVideo.play().catch(e => console.log('Video autoplay prevented:', e));
+        });
+        
+        // Also ensure video plays on first user interaction
+        document.body.addEventListener('click', () => {
+          if (bgVideo.paused) {
+            bgVideo.play().catch(e => console.log('Video play prevented:', e));
+          }
+        }, { once: true });
+      }
+    });
   </script>
 </body>
 
