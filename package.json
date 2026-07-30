@@ -1,0 +1,17 @@
+{
+  "name": "archive-fashion-marketplace",
+  "version": "1.0.0",
+  "description": "Backend API server for High-End Fashion Marketplace",
+  "main": "backend.js",
+  "scripts": {
+    "start": "node backend.js",
+    "dev": "node --watch backend.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.4.2",
+    "express": "^4.19.2",
+    "mongodb": "^7.5.0",
+    "mongoose": "^9.8.1"
+  }
+}

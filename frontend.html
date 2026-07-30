@@ -1,0 +1,1563 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>High-End Fashion Marketplace</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #F5F5F7;
+      color: #000000;
+    }
+
+    /* Custom Glassmorphism utility */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+    }
+
+    .glass-card-dark {
+      background: rgba(20, 20, 20, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Marquee Animation */
+    @keyframes marquee {
+      0% {
+        transform: translateX(0%);
+      }
+
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+
+    .animate-marquee {
+      display: flex;
+      width: 200%;
+      animation: marquee 20s linear infinite;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+    }
+
+    /* ===== DARK MODE ===== */
+    body {
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    body.dark-mode {
+      background-color: #0a0a0a !important;
+      color: #ffffff !important;
+    }
+
+    body.dark-mode .dm-bg-white {
+      background-color: #111 !important;
+    }
+
+    body.dark-mode .dm-bg-light {
+      background-color: #1a1a1a !important;
+    }
+
+    body.dark-mode .dm-text-dark {
+      color: #ffffff !important;
+    }
+
+    body.dark-mode .dm-text-muted {
+      color: #a1a1aa !important;
+    }
+
+    body.dark-mode .dm-border {
+      border-color: #333 !important;
+    }
+
+    /* Header in dark mode */
+    body.dark-mode header {
+      background: rgba(10, 10, 10, 0.8) !important;
+      border-color: rgba(255, 255, 255, 0.06) !important;
+    }
+
+    /* Marquee bar */
+    body.dark-mode .marquee-bar {
+      background-color: #111 !important;
+      border-color: #333 !important;
+      color: #fff !important;
+    }
+
+    /* Product cards */
+    body.dark-mode .product-card-bg {
+      background-color: #1a1a1a !important;
+    }
+
+    body.dark-mode .product-card-meta {
+      background-color: #111 !important;
+      border-color: #2a2a2a !important;
+    }
+
+    body.dark-mode .product-card-meta h3,
+    body.dark-mode .product-card-meta span,
+    body.dark-mode .product-card-meta p {
+      color: #e4e4e7 !important;
+    }
+
+    /* Category cards */
+    body.dark-mode .cat-card-label {
+      background: rgba(10, 10, 10, 0.85) !important;
+      color: #fff !important;
+    }
+
+    /* Footer */
+    body.dark-mode footer {
+      background-color: #000 !important;
+    }
+
+    /* Section headings */
+    body.dark-mode .section-heading {
+      color: #ffffff !important;
+    }
+
+    /* Filter / sort pills */
+    body.dark-mode .filter-pill {
+      background-color: #1a1a1a !important;
+      border-color: #333 !important;
+      color: #e4e4e7 !important;
+    }
+
+    body.dark-mode .filter-pill.active {
+      background-color: #ffffff !important;
+      color: #000 !important;
+    }
+
+    /* Newsletter section */
+    body.dark-mode .newsletter-section {
+      background-color: #111 !important;
+      border-color: #2a2a2a !important;
+    }
+
+    body.dark-mode .newsletter-section input {
+      background-color: #1e1e1e !important;
+      border-color: #333 !important;
+      color: #fff !important;
+    }
+
+    /* Editorial cards */
+    body.dark-mode .editorial-card {
+      background-color: #1a1a1a !important;
+      border-color: #2a2a2a !important;
+    }
+
+    body.dark-mode .editorial-card p,
+    body.dark-mode .editorial-card h4 {
+      color: #e4e4e7 !important;
+    }
+  </style>
+</head>
+
+<body class="antialiased selection:bg-white selection:text-black dark-mode">
+
+  <!-- ==========================================
+       1. STICKY GLASS HEADER
+  =========================================== -->
+  <header class="sticky top-0 z-40 glass-card px-6 py-4 transition-all duration-300">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+
+      <!-- Navigation Links -->
+      <nav class="hidden lg:flex items-center space-x-8 text-xs font-semibold tracking-widest uppercase">
+        <button onclick="filterCategory('All')"
+          class="category-nav-btn hover:opacity-60 transition text-black font-bold" data-cat="All">All</button>
+
+        <!-- Men Dropdown -->
+        <div class="relative group">
+          <button onclick="filterCategory('Men')"
+            class="category-nav-btn hover:opacity-60 transition text-zinc-500 py-4" data-cat="Men">Men</button>
+          <div
+            class="absolute left-0 top-full w-48 bg-zinc-900 border border-zinc-800 rounded-xl shadow-2xl p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+            <a href="#" onclick="filterCategory('Men', 'T-Shirts')"
+              class="block px-4 py-2 text-[10px] font-bold text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-lg transition">T-Shirts</a>
+            <a href="#" onclick="filterCategory('Men', 'Shirts')"
+              class="block px-4 py-2 text-[10px] font-bold text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-lg transition">Shirts</a>
+            <a href="#" onclick="filterCategory('Men', 'Shorts')"
+              class="block px-4 py-2 text-[10px] font-bold text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-lg transition">Shorts</a>
+            <a href="#" onclick="filterCategory('Men', 'Jeans')"
+              class="block px-4 py-2 text-[10px] font-bold text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-lg transition">Jeans</a>
+            <a href="#" onclick="filterCategory('Men', 'Outerwear')"
+              class="block px-4 py-2 text-[10px] font-bold text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-lg transition">Outerwear</a>
+          </div>
+        </div>
+
+        <!-- Women Dropdown -->
+        <div class="relative group">
+          <button onclick="filterCategory('Women')"
+            class="category-nav-btn hover:opacity-60 transition text-zinc-500 py-4" data-cat="Women">Women</button>
+          <div
+            class="absolute left-0 top-full w-48 bg-zinc-900 border border-zinc-800 rounded-xl shadow-2xl p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+            <a href="#" onclick="filterCategory('Women', 'Tops')"
+              class="block px-4 py-2 text-[10px] font-bold text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-lg transition">Tops</a>
+            <a href="#" onclick="filterCategory('Women', 'Dresses')"
+              class="block px-4 py-2 text-[10px] font-bold text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-lg transition">Dresses</a>
+            <a href="#" onclick="filterCategory('Women', 'Skirts')"
+              class="block px-4 py-2 text-[10px] font-bold text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-lg transition">Skirts</a>
+            <a href="#" onclick="filterCategory('Women', 'Jeans')"
+              class="block px-4 py-2 text-[10px] font-bold text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-lg transition">Jeans</a>
+            <a href="#" onclick="filterCategory('Women', 'Outerwear')"
+              class="block px-4 py-2 text-[10px] font-bold text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-lg transition">Outerwear</a>
+          </div>
+        </div>
+
+        <!-- Kids Dropdown -->
+        <div class="relative group">
+          <button onclick="filterCategory('Kids')"
+            class="category-nav-btn hover:opacity-60 transition text-zinc-500 py-4" data-cat="Kids">Children</button>
+          <div
+            class="absolute left-0 top-full w-48 bg-zinc-900 border border-zinc-800 rounded-xl shadow-2xl p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+            <a href="#" onclick="filterCategory('Kids', 'T-Shirts')"
+              class="block px-4 py-2 text-[10px] font-bold text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-lg transition">T-Shirts</a>
+            <a href="#" onclick="filterCategory('Kids', 'Hoodies')"
+              class="block px-4 py-2 text-[10px] font-bold text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-lg transition">Hoodies</a>
+            <a href="#" onclick="filterCategory('Kids', 'Shorts')"
+              class="block px-4 py-2 text-[10px] font-bold text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-lg transition">Shorts</a>
+            <a href="#" onclick="filterCategory('Kids', 'Pants')"
+              class="block px-4 py-2 text-[10px] font-bold text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-lg transition">Pants</a>
+          </div>
+        </div>
+
+        <button onclick="document.getElementById('products-section').scrollIntoView({ behavior: 'smooth' })"
+          class="hover:opacity-60 transition text-zinc-500 flex items-center gap-1">
+          Buy
+        </button>
+        <button onclick="openSellModal()" class="hover:opacity-60 transition text-zinc-500 flex items-center gap-1">
+          Sell
+        </button>
+      </nav>
+
+      <!-- Brand Logo -->
+      <a href="#" onclick="filterCategory('All')"
+        class="text-2xl md:text-3xl font-black tracking-tighter uppercase mx-auto lg:mx-0">
+        ARCHIVE
+      </a>
+
+      <!-- Action Icons -->
+      <div class="flex items-center space-x-5">
+        <!-- Dark Mode Toggle -->
+        <button id="theme-toggle" onclick="toggleDarkMode()" class="hover:opacity-60 transition p-1"
+          aria-label="Toggle theme">
+          <i id="theme-icon" data-lucide="sun" class="w-5 h-5"></i>
+        </button>
+        <button onclick="openSearchModal()" class="hover:opacity-60 transition p-1" aria-label="Search">
+          <i data-lucide="search" class="w-5 h-5"></i>
+        </button>
+        <button onclick="toggleWishlistDrawer()" class="hover:opacity-60 transition relative p-1" aria-label="Wishlist">
+          <i data-lucide="heart" class="w-5 h-5"></i>
+          <span id="wishlist-badge"
+            class="hidden absolute -top-1 -right-1 bg-red-600 text-white text-[9px] font-bold rounded-full w-4 h-4 items-center justify-center">0</span>
+        </button>
+        <button onclick="toggleCartDrawer()" class="hover:opacity-60 transition relative p-1" aria-label="Cart">
+          <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+          <span id="cart-badge"
+            class="absolute -top-1 -right-1 bg-black text-white text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center">0</span>
+        </button>
+
+        <div class="relative">
+          <button id="auth-btn" onclick="handleAuthButtonClick()"
+            class="hover:opacity-60 transition flex items-center gap-2 p-1" aria-label="Login">
+            <i data-lucide="user" class="w-5 h-5"></i>
+            <span class="text-[10px] font-bold uppercase tracking-widest hidden sm:block">Login</span>
+          </button>
+
+          <!-- User Dropdown -->
+          <div id="user-dropdown"
+            class="absolute right-0 mt-4 w-40 bg-zinc-900 border border-zinc-800 rounded-2xl shadow-2xl p-2 hidden opacity-0 transition-opacity duration-200 z-50 pointer-events-none">
+            <button onclick="showToast('Profile feature coming soon!', 'info')"
+              class="w-full text-left px-3 py-2 text-xs font-bold text-zinc-300 hover:text-white hover:bg-zinc-800 rounded-xl transition mb-1 pointer-events-auto">Profile</button>
+            <button onclick="showToast('Orders feature coming soon!', 'info')"
+              class="w-full text-left px-3 py-2 text-xs font-bold text-zinc-300 hover:text-white hover:bg-zinc-800 rounded-xl transition mb-1 pointer-events-auto">My
+              Orders</button>
+            <button onclick="confirmLogout()"
+              class="w-full text-left px-3 py-2 text-xs font-bold text-red-400 hover:text-red-300 hover:bg-zinc-800 rounded-xl transition pointer-events-auto">Logout</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-20 py-8">
+
+    <!-- ==========================================
+         2. HERO SECTION
+    =========================================== -->
+    <section
+      class="relative min-h-[450px] lg:min-h-[400px] rounded-3xl overflow-hidden bg-black text-white flex items-center px-8 lg:px-16 shadow-2xl">
+
+      <video autoplay loop muted playsinline
+        class="absolute inset-0 w-full h-full object-cover opacity-80 pointer-events-none z-0">
+        <source src="WhatsApp%20Video%202026-07-26%20at%208.30.59%20PM.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+
+      <div class="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent z-10"></div>
+
+      <div class="absolute inset-0 flex items-center justify-center select-none pointer-events-none z-10">
+        <h1 class="text-[14vw] font-black text-white/5 tracking-tighter uppercase leading-none whitespace-nowrap">
+          HAUTE MOVES
+        </h1>
+      </div>
+
+      <div class="relative z-20 max-w-xl space-y-6">
+        <h2 class="text-4xl sm:text-6xl font-black uppercase tracking-tight leading-[1.05] text-white">
+          Fashion That Moves With You
+        </h2>
+        <p class="text-sm sm:text-base text-zinc-300 font-normal max-w-md">
+          Discover curated luxury streetwear and high-fashion archival pieces from verified sellers worldwide.
+        </p>
+
+        <div class="flex items-center space-x-4 pt-2">
+          <a href="#products-section"
+            class="bg-white text-black text-xs font-semibold uppercase tracking-wider px-8 py-4 rounded-full hover:bg-zinc-200 transition shadow-lg">
+            Shop Now
+          </a>
+          <button onclick="openSellModal()"
+            class="text-xs font-semibold uppercase tracking-wider px-6 py-4 text-white hover:opacity-70 transition flex items-center gap-1">
+            Explore New In <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="absolute bottom-8 right-8 z-20 hidden sm:block">
+        <div class="glass-card-dark px-5 py-3 rounded-2xl shadow-lg border border-white/20 text-center text-white">
+          <p class="text-[10px] font-bold tracking-widest text-zinc-400 uppercase">Collection</p>
+          <p class="text-lg font-black tracking-tight">2026 EDITION</p>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ==========================================
+         MARQUEE DIVIDER LINE
+    =========================================== -->
+    <div class="overflow-hidden border-y border-black/10 py-3 bg-[#F5F5F7]">
+      <div
+        class="animate-marquee flex items-center text-[10px] sm:text-xs font-black tracking-[0.2em] uppercase text-black">
+        <div class="flex items-center justify-around w-1/2">
+          <span>Explore The Archive</span> <span class="mx-4 text-zinc-400">•</span>
+          <span>Authentic Luxury</span> <span class="mx-4 text-zinc-400">•</span>
+          <span>New Arrivals Daily</span> <span class="mx-4 text-zinc-400">•</span>
+          <span>Global Shipping</span> <span class="mx-4 text-zinc-400">•</span>
+        </div>
+        <div class="flex items-center justify-around w-1/2">
+          <span>Explore The Archive</span> <span class="mx-4 text-zinc-400">•</span>
+          <span>Authentic Luxury</span> <span class="mx-4 text-zinc-400">•</span>
+          <span>New Arrivals Daily</span> <span class="mx-4 text-zinc-400">•</span>
+          <span>Global Shipping</span> <span class="mx-4 text-zinc-400">•</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         3. CATEGORY SHOWCASE BAR
+    =========================================== -->
+    <section class="bg-black text-white rounded-3xl p-6 sm:p-8 shadow-2xl">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto">
+
+        <!-- Category Card: Men -->
+        <div onclick="filterCategory('Men')"
+          class="glass-card-dark rounded-2xl p-5 group cursor-pointer hover:border-white/30 transition duration-300">
+          <div class="aspect-[4/5] rounded-xl overflow-hidden mb-4 bg-zinc-900">
+            <img src="./all photos/chico.jpg" alt="Men"
+              class="w-full h-full object-cover object-top grayscale group-hover:scale-105 transition duration-500">
+          </div>
+          <h3 class="text-xl font-bold tracking-tight uppercase">Men</h3>
+          <p class="text-xs text-zinc-400 mt-1 mb-4">Tailored essentials, outerwear & footwear.</p>
+          <span
+            class="text-xs font-semibold uppercase tracking-wider flex items-center gap-2 group-hover:translate-x-1 transition duration-300">
+            Shop Men <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </span>
+        </div>
+
+        <!-- Category Card: Women -->
+        <div onclick="filterCategory('Women')"
+          class="glass-card-dark rounded-2xl p-5 group cursor-pointer hover:border-white/30 transition duration-300">
+          <div class="aspect-[4/5] rounded-xl overflow-hidden mb-4 bg-zinc-900">
+            <img src="./all photos/women_fashion_bw.png" alt="Women"
+              class="w-full h-full object-cover object-top grayscale group-hover:scale-105 transition duration-500">
+          </div>
+          <h3 class="text-xl font-bold tracking-tight uppercase">Women</h3>
+          <p class="text-xs text-zinc-400 mt-1 mb-4">Minimalist silhouettes & modern tailoring.</p>
+          <span
+            class="text-xs font-semibold uppercase tracking-wider flex items-center gap-2 group-hover:translate-x-1 transition duration-300">
+            Shop Women <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </span>
+        </div>
+
+        <!-- Category Card: Kids -->
+        <div onclick="filterCategory('Kids')"
+          class="glass-card-dark rounded-2xl p-5 group cursor-pointer hover:border-white/30 transition duration-300">
+          <div class="aspect-[4/5] rounded-xl overflow-hidden mb-4 bg-zinc-900">
+            <img src="./all photos/kids_fashion_bw_new.png" alt="Kids"
+              class="w-full h-full object-cover object-top grayscale group-hover:scale-105 transition duration-500">
+          </div>
+          <h3 class="text-xl font-bold tracking-tight uppercase">Kids</h3>
+          <p class="text-xs text-zinc-400 mt-1 mb-4">Contemporary comfort for the next generation.</p>
+          <span
+            class="text-xs font-semibold uppercase tracking-wider flex items-center gap-2 group-hover:translate-x-1 transition duration-300">
+            Shop Kids <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==========================================
+         4. FEATURED BANNER ("NEW VIBES")
+    =========================================== -->
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+
+      <!-- Text Side Block -->
+      <div class="lg:col-span-5 bg-[#EBEBEB] rounded-3xl p-8 sm:p-12 flex flex-col justify-between">
+        <div>
+          <span class="text-xs font-bold tracking-widest text-zinc-500 uppercase">Editorial Spec</span>
+          <h2 class="text-3xl sm:text-5xl font-black uppercase tracking-tight mt-3 mb-4 leading-tight">
+            New Season / New Vibes
+          </h2>
+          <p class="text-sm text-zinc-600 leading-relaxed">
+            Unveiling our high-summer drop. Elevated staples engineered with tactile organic fabrics and refined cuts.
+          </p>
+        </div>
+        <div class="pt-8">
+          <a href="#products-section"
+            class="inline-block bg-black text-white text-xs font-semibold uppercase tracking-wider px-8 py-4 rounded-full hover:bg-zinc-800 transition">
+            Explore Collection
+          </a>
+        </div>
+      </div>
+
+      <!-- Photography Grid Block -->
+      <div class="lg:col-span-7 grid grid-cols-2 gap-4">
+        <div class="rounded-3xl overflow-hidden h-[380px] sm:h-[460px]">
+          <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=800&auto=format&fit=crop"
+            alt="Editorial Fashion" class="w-full h-full object-cover hover:scale-105 transition duration-700">
+        </div>
+        <div class="grid grid-rows-2 gap-4 h-[380px] sm:h-[460px]">
+          <div class="rounded-3xl overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=800&auto=format&fit=crop"
+              alt="Editorial Fashion 2" class="w-full h-full object-cover hover:scale-105 transition duration-700">
+          </div>
+          <div class="rounded-3xl overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=800&auto=format&fit=crop"
+              alt="Editorial Fashion 3" class="w-full h-full object-cover hover:scale-105 transition duration-700">
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ==========================================
+         5. VALUE PROPOSITION BAR
+    =========================================== -->
+    <section class="glass-card rounded-2xl p-8 shadow-sm">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+
+        <div class="flex flex-col items-center space-y-2">
+          <i data-lucide="truck" class="w-6 h-6 stroke-1"></i>
+          <h4 class="text-xs font-bold uppercase tracking-wider">Fast Delivery</h4>
+          <p class="text-[11px] text-zinc-500">Global tracked express shipping</p>
+        </div>
+
+        <div class="flex flex-col items-center space-y-2">
+          <i data-lucide="rotate-ccw" class="w-6 h-6 stroke-1"></i>
+          <h4 class="text-xs font-bold uppercase tracking-wider">Easy Returns</h4>
+          <p class="text-[11px] text-zinc-500">14-day effortless return policy</p>
+        </div>
+
+        <div class="flex flex-col items-center space-y-2">
+          <i data-lucide="shield-check" class="w-6 h-6 stroke-1"></i>
+          <h4 class="text-xs font-bold uppercase tracking-wider">Quality Assured</h4>
+          <p class="text-[11px] text-zinc-500">Verified authentic items</p>
+        </div>
+
+        <div class="flex flex-col items-center space-y-2">
+          <i data-lucide="credit-card" class="w-6 h-6 stroke-1"></i>
+          <h4 class="text-xs font-bold uppercase tracking-wider">Secure Payment</h4>
+          <p class="text-[11px] text-zinc-500">Encrypted checkout protection</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==========================================
+         6. FEATURED PRODUCT GRID
+    =========================================== -->
+    <section id="products-section" class="space-y-6">
+
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between border-b border-black/10 pb-4 gap-4">
+        <div>
+          <span class="text-[10px] font-bold tracking-widest text-zinc-400 uppercase">Curated Selection</span>
+          <h2 id="current-category-title" class="text-2xl font-black tracking-tight uppercase">Best Of Collection</h2>
+        </div>
+
+        <!-- Filter Pill Tabs -->
+        <div class="flex items-center gap-2 overflow-x-auto pb-1">
+          <button onclick="filterCategory('All')"
+            class="cat-pill bg-black text-white px-4 py-1.5 rounded-full text-xs font-bold uppercase transition"
+            data-cat="All">All</button>
+          <button onclick="filterCategory('Men')"
+            class="cat-pill bg-zinc-200 text-zinc-700 hover:bg-zinc-300 px-4 py-1.5 rounded-full text-xs font-bold uppercase transition"
+            data-cat="Men">Men</button>
+          <button onclick="filterCategory('Women')"
+            class="cat-pill bg-zinc-200 text-zinc-700 hover:bg-zinc-300 px-4 py-1.5 rounded-full text-xs font-bold uppercase transition"
+            data-cat="Women">Women</button>
+          <button onclick="filterCategory('Kids')"
+            class="cat-pill bg-zinc-200 text-zinc-700 hover:bg-zinc-300 px-4 py-1.5 rounded-full text-xs font-bold uppercase transition"
+            data-cat="Kids">Kids</button>
+        </div>
+      </div>
+
+      <!-- 4-Column Dynamic Product Grid -->
+      <div id="product-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Products populated via API -->
+      </div>
+
+      <!-- View More Container -->
+      <div id="view-more-container" class="mt-12 col-span-full"></div>
+
+    </section>
+
+    <!-- ==========================================
+         7. TRENDING EDITORIALS
+    =========================================== -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+      <!-- Editorial 1 -->
+      <div onclick="openEditorialModal('style-guide')"
+        class="relative group cursor-pointer rounded-3xl overflow-hidden h-[250px] sm:h-[300px]">
+        <img src="./all photos/editorial1.png" alt="Editorial"
+          class="w-full h-full object-cover grayscale group-hover:scale-105 transition duration-700">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+        <div class="absolute bottom-0 left-0 p-8 text-white space-y-3">
+          <span class="text-[10px] font-bold tracking-widest text-white/70 uppercase">Style Guide</span>
+          <h3 class="text-2xl sm:text-3xl font-black uppercase tracking-tight leading-none">Mastering <br> Proportions
+          </h3>
+          <p class="text-xs text-zinc-300 max-w-xs line-clamp-2">How to balance oversized silhouettes with tailored
+            essentials for a modern look.</p>
+          <div class="pt-2"><span
+              class="text-xs font-bold uppercase tracking-wider flex items-center gap-2 group-hover:translate-x-1 transition duration-300">Read
+              Editorial <i data-lucide="arrow-right" class="w-4 h-4"></i></span></div>
+        </div>
+      </div>
+
+      <!-- Editorial 2 -->
+      <div onclick="openEditorialModal('nylon')"
+        class="relative group cursor-pointer rounded-3xl overflow-hidden h-[250px] sm:h-[300px]">
+        <img src="./all photos/editorial_model.jpg" alt="Editorial"
+          class="w-full h-full object-cover grayscale group-hover:scale-105 transition duration-700">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+        <div class="absolute bottom-0 left-0 p-8 text-white space-y-3">
+          <span class="text-[10px] font-bold tracking-widest text-white/70 uppercase">Trend Report</span>
+          <h3 class="text-2xl sm:text-3xl font-black uppercase tracking-tight leading-none">The Return <br> of Nylon
+          </h3>
+          <p class="text-xs text-zinc-300 max-w-xs line-clamp-2">Exploring the resurgence of technical fabrics in
+            high-end streetwear.</p>
+          <div class="pt-2"><span
+              class="text-xs font-bold uppercase tracking-wider flex items-center gap-2 group-hover:translate-x-1 transition duration-300">Read
+              Editorial <i data-lucide="arrow-right" class="w-4 h-4"></i></span></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==========================================
+       SLIDE-OVER CART DRAWER
+  =========================================== -->
+  <div id="cart-drawer-overlay"
+    class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-opacity duration-300"
+    onclick="toggleCartDrawer()"></div>
+
+  <aside id="cart-drawer"
+    class="fixed top-0 right-0 bottom-0 w-full max-w-md bg-zinc-950 text-white z-50 transform translate-x-full transition-transform duration-300 flex flex-col justify-between shadow-2xl border-l border-zinc-800">
+    <div class="p-6 border-b border-zinc-800 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+        <h3 class="text-base font-black tracking-wider uppercase">Your Cart</h3>
+      </div>
+      <button onclick="toggleCartDrawer()" class="p-2 text-zinc-400 hover:text-white transition">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+    </div>
+
+    <!-- Cart Items Scroll Area -->
+    <div id="cart-items-container" class="p-6 flex-1 overflow-y-auto space-y-4 custom-scrollbar">
+      <!-- Loaded dynamically via API -->
+    </div>
+
+    <!-- Cart Footer Summary -->
+    <div class="p-6 border-t border-zinc-800 bg-zinc-900 space-y-4">
+      <div class="flex justify-between items-center text-sm font-semibold">
+        <span class="text-zinc-400 uppercase tracking-wider text-xs">Subtotal</span>
+        <span id="cart-subtotal" class="text-xl font-bold text-white">$0.00</span>
+      </div>
+      <p class="text-[11px] text-zinc-500">Taxes and shipping calculated at checkout. Express 2-day delivery available.
+      </p>
+      <button onclick="checkoutCart()"
+        class="w-full bg-white text-black text-xs font-extrabold uppercase tracking-widest py-4 rounded-xl hover:bg-zinc-200 transition">
+        Proceed To Checkout
+      </button>
+    </div>
+  </aside>
+
+  <!-- ==========================================
+       SEARCH OVERLAY MODAL
+  =========================================== -->
+  <div id="search-modal"
+    class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 opacity-0 pointer-events-none transition-opacity duration-300 flex items-start justify-center pt-20 px-4">
+    <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 w-full max-w-2xl text-white shadow-2xl space-y-6">
+      <div class="flex items-center justify-between border-b border-zinc-800 pb-4">
+        <div class="flex items-center gap-3 flex-1">
+          <i data-lucide="search" class="w-6 h-6 text-zinc-400"></i>
+          <input type="text" id="search-input" oninput="handleSearch(this.value)"
+            placeholder="Search pieces, jackets, hoodies, categories..."
+            class="bg-transparent text-lg font-medium text-white placeholder-zinc-500 focus:outline-none w-full">
+        </div>
+        <button onclick="closeSearchModal()" class="p-2 text-zinc-400 hover:text-white transition">
+          <i data-lucide="x" class="w-6 h-6"></i>
+        </button>
+      </div>
+
+      <div id="search-results" class="max-h-[60vh] overflow-y-auto space-y-3 custom-scrollbar">
+        <p class="text-xs text-zinc-500 text-center py-8">Type above to search archival streetwear & luxury apparel.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       AUTH MODAL
+  =========================================== -->
+  <div id="auth-modal"
+    class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-4">
+    <div
+      class="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 sm:p-8 w-full max-w-md text-white shadow-2xl space-y-6">
+      <div class="flex items-center justify-between border-b border-zinc-800 pb-4">
+        <h3 id="auth-title" class="text-xl font-black uppercase tracking-tight">Welcome Back</h3>
+        <button onclick="closeAuthModal()" class="p-2 text-zinc-400 hover:text-white transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form id="auth-form" onsubmit="submitAuth(event)" class="space-y-4">
+        <div id="name-input-container" class="hidden">
+          <label class="block text-xs font-bold uppercase tracking-wider text-zinc-400 mb-1">Full Name</label>
+          <input type="text" id="auth-name" placeholder="John Doe"
+            class="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-white">
+        </div>
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-zinc-400 mb-1">Email</label>
+          <input type="email" id="auth-email" required placeholder="you@gmail.com" pattern=".*@gmail\.com$"
+            title="Please use a valid @gmail.com address."
+            class="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-white">
+        </div>
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-zinc-400 mb-1">Password</label>
+          <input type="password" id="auth-password" required placeholder="••••••••"
+            class="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-white">
+        </div>
+        <button type="submit" id="auth-submit-btn"
+          class="w-full bg-white text-black text-xs font-extrabold uppercase tracking-widest py-4 rounded-xl hover:bg-zinc-200 transition mt-2">
+          Login
+        </button>
+
+        <!-- Inline error banner -->
+        <div id="auth-error-banner"
+          class="hidden flex items-start gap-3 bg-red-900/40 border border-red-700/60 rounded-xl px-4 py-3">
+          <i data-lucide="alert-circle" class="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5"></i>
+          <div>
+            <p class="text-xs font-bold text-red-300">Account doesn't exist.</p>
+            <p class="text-[11px] text-red-400 mt-0.5">Want to join? <button type="button"
+                onclick="document.getElementById('auth-error-banner').classList.add('hidden'); toggleAuthMode()"
+                class="underline font-bold text-white hover:text-zinc-200">Create an Account</button></p>
+          </div>
+        </div>
+      </form>
+
+      <p class="text-center text-xs text-zinc-500 pt-2">
+        <span id="auth-toggle-text">Don't have an account?</span>
+        <button type="button" onclick="toggleAuthMode()"
+          class="text-white font-bold uppercase tracking-wider hover:underline ml-1" id="auth-toggle-btn">Sign
+          Up</button>
+      </p>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       SELL ITEM MODAL
+  =========================================== -->
+  <div id="sell-modal"
+    class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-4">
+    <div
+      class="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 sm:p-8 w-full max-w-lg text-white shadow-2xl space-y-6">
+      <div class="flex items-center justify-between border-b border-zinc-800 pb-4">
+        <h3 class="text-xl font-black uppercase tracking-tight">List Item For Sale</h3>
+        <button onclick="closeSellModal()" class="p-2 text-zinc-400 hover:text-white transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form id="sell-form" onsubmit="submitSellListing(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-zinc-400 mb-1">Item Title</label>
+          <input type="text" id="sell-title" required placeholder="e.g. Vintage Leather Biker Jacket"
+            class="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-white">
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-zinc-400 mb-1">Category</label>
+            <select id="sell-category" required
+              class="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-white">
+              <option value="Men">Men</option>
+              <option value="Women">Women</option>
+              <option value="Kids">Kids</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-zinc-400 mb-1">Price ($)</label>
+            <input type="number" step="0.01" id="sell-price" required placeholder="250.00"
+              class="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-white">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-zinc-400 mb-1">Seller Email</label>
+          <input type="email" id="sell-email" required placeholder="seller@archive.com"
+            class="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-white">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-zinc-400 mb-1">Description &
+            Condition</label>
+          <textarea id="sell-desc" rows="3" placeholder="Mint condition, worn twice..."
+            class="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-white"></textarea>
+        </div>
+
+        <button type="submit"
+          class="w-full bg-white text-black text-xs font-extrabold uppercase tracking-widest py-4 rounded-xl hover:bg-zinc-200 transition">
+          Submit For Authentication
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       EDITORIAL MODAL
+  =========================================== -->
+  <div id="editorial-modal"
+    class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-4">
+    <div
+      class="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 sm:p-8 w-full max-w-2xl text-white shadow-2xl flex flex-col max-h-[90vh]">
+      <div class="flex items-center justify-between border-b border-zinc-800 pb-4 mb-6">
+        <h3 id="editorial-modal-title" class="text-xl font-black uppercase tracking-tight">Editorial</h3>
+        <button onclick="closeEditorialModal()" class="p-2 text-zinc-400 hover:text-white transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="overflow-y-auto custom-scrollbar pr-2 flex-1 space-y-6">
+        <img id="editorial-modal-img" src="" alt="Editorial Image"
+          class="w-full h-64 object-cover rounded-2xl grayscale">
+        <div id="editorial-modal-content" class="text-sm text-zinc-300 space-y-4 leading-relaxed">
+          <!-- Content injected via JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       PRODUCT PREVIEW MODAL
+  =========================================== -->
+  <div id="product-preview-modal"
+    class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-4">
+    <div
+      class="bg-zinc-900 border border-zinc-800 rounded-3xl w-full max-w-4xl text-white shadow-2xl flex flex-col md:flex-row overflow-hidden relative max-h-[90vh]">
+
+      <button onclick="closeProductPreview()"
+        class="absolute top-4 right-4 p-2 bg-black/50 rounded-full text-zinc-300 hover:text-white transition z-10">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <!-- Image Section -->
+      <div class="w-full md:w-1/2 bg-zinc-200 h-64 md:h-auto relative">
+        <img id="preview-img" src="" alt="Product Image" class="w-full h-full object-cover">
+      </div>
+
+      <!-- Details Section -->
+      <div class="w-full md:w-1/2 p-8 sm:p-10 flex flex-col overflow-y-auto custom-scrollbar">
+        <span id="preview-category"
+          class="text-[10px] font-bold tracking-widest text-zinc-500 uppercase mb-2">Category</span>
+        <h3 id="preview-title" class="text-3xl font-black tracking-tight uppercase leading-none mb-2">Product Name</h3>
+        <p id="preview-price" class="text-xl font-medium text-white mb-6">$0.00</p>
+
+        <div class="space-y-4 mb-8 flex-1">
+          <p id="preview-desc" class="text-sm text-zinc-400 leading-relaxed">Experience premium quality and timeless
+            style. This piece features elevated construction with attention to detail.</p>
+
+          <div>
+            <h4 class="text-[10px] font-bold uppercase tracking-wider text-zinc-500 mb-3">Select Size</h4>
+            <div class="flex gap-2" id="preview-size-container">
+              <button onclick="selectSize(this)"
+                class="size-btn w-10 h-10 rounded-full border border-zinc-700 flex items-center justify-center text-xs font-bold hover:border-white transition">S</button>
+              <button onclick="selectSize(this)"
+                class="size-btn w-10 h-10 rounded-full border border-white bg-white text-black flex items-center justify-center text-xs font-bold transition">M</button>
+              <button onclick="selectSize(this)"
+                class="size-btn w-10 h-10 rounded-full border border-zinc-700 flex items-center justify-center text-xs font-bold hover:border-white transition">L</button>
+              <button onclick="selectSize(this)"
+                class="size-btn w-10 h-10 rounded-full border border-zinc-700 flex items-center justify-center text-xs font-bold hover:border-white transition">XL</button>
+            </div>
+          </div>
+        </div>
+
+        <button id="preview-add-cart-btn" onclick=""
+          class="w-full bg-white text-black text-xs font-extrabold uppercase tracking-widest py-4 rounded-xl hover:bg-zinc-200 transition flex items-center justify-center gap-2 mt-auto">
+          <i data-lucide="shopping-bag" class="w-4 h-4 text-black"></i> Add To Bag
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST CONTAINER -->
+  <div id="toast-container" class="fixed bottom-6 right-6 z-50 space-y-3 pointer-events-none"></div>
+
+  <!-- ==========================================
+       FOOTER
+  =========================================== -->
+  <footer class="bg-black text-white mt-20 pt-16 pb-12 border-t border-zinc-800">
+    <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-10">
+      <div class="space-y-4">
+        <h3 class="text-xl font-black tracking-tighter">ARCHIVE</h3>
+        <p class="text-xs text-zinc-400 leading-relaxed">The premier marketplace for buying and selling authentic
+          high-fashion and modern luxury apparel.</p>
+      </div>
+      <div>
+        <h4 class="text-xs font-bold uppercase tracking-wider mb-4 text-zinc-300">Shop</h4>
+        <ul class="space-y-2 text-xs text-zinc-400">
+          <li><a href="#" onclick="filterCategory('All')" class="hover:text-white transition">New Arrivals</a></li>
+          <li><a href="#" onclick="filterCategory('Men')" class="hover:text-white transition">Men's Collection</a></li>
+          <li><a href="#" onclick="filterCategory('Women')" class="hover:text-white transition">Women's Collection</a>
+          </li>
+          <li><a href="#" onclick="filterCategory('Kids')" class="hover:text-white transition">Kids' Collection</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-xs font-bold uppercase tracking-wider mb-4 text-zinc-300">Marketplace</h4>
+        <ul class="space-y-2 text-xs text-zinc-400">
+          <li><a href="#" onclick="openSellModal()" class="hover:text-white transition">Sell Your Clothes</a></li>
+          <li><a href="#" class="hover:text-white transition">Authentication Process</a></li>
+          <li><a href="#" class="hover:text-white transition">Buyer Guarantee</a></li>
+          <li><a href="#" class="hover:text-white transition">Seller Guidelines</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-xs font-bold uppercase tracking-wider mb-4 text-zinc-300">Newsletter</h4>
+        <p class="text-xs text-zinc-400 mb-3">Subscribe for exclusive collection drops.</p>
+        <form onsubmit="submitNewsletter(event)" class="flex">
+          <input type="email" id="newsletter-email" required placeholder="ENTER YOUR EMAIL"
+            class="bg-zinc-900 border border-zinc-700 text-xs text-white px-3 py-2 rounded-l-lg focus:outline-none w-full placeholder:text-zinc-600">
+          <button type="submit"
+            class="bg-white text-black text-xs font-bold px-4 rounded-r-lg hover:bg-zinc-200 transition uppercase">Join</button>
+        </form>
+      </div>
+    </div>
+    <div
+      class="max-w-7xl mx-auto px-6 mt-12 pt-6 border-t border-zinc-800 text-[11px] text-zinc-500 flex justify-between flex-wrap gap-4">
+      <p>© 2026 ARCHIVE MARKETPLACE INC. ALL RIGHTS RESERVED.</p>
+      <div class="space-x-4">
+        <a href="#" class="hover:text-white transition">PRIVACY POLICY</a>
+        <a href="#" class="hover:text-white transition">TERMS OF SERVICE</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==========================================
+       CLIENT SCRIPT LOGIC
+  =========================================== -->
+  <script>
+    let currentCategory = 'All';
+    let wishlistSet = new Set();
+    let currentProductsList = [];
+    let showAllProducts = false;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      fetchProducts();
+      fetchCart();
+      fetchWishlist();
+
+      // Restore theme preference (default = dark)
+      if (localStorage.getItem('archive_theme') === 'light') {
+        document.body.classList.remove('dark-mode');
+        document.getElementById('theme-icon').setAttribute('data-lucide', 'moon');
+        lucide.createIcons();
+      }
+    });
+
+    // Dark Mode Toggle
+    function toggleDarkMode() {
+      const isDark = document.body.classList.toggle('dark-mode');
+      const icon = document.getElementById('theme-icon');
+      icon.setAttribute('data-lucide', isDark ? 'sun' : 'moon');
+      lucide.createIcons();
+      localStorage.setItem('archive_theme', isDark ? 'dark' : 'light');
+    }
+
+    // Toast Notifications
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = `glass-card-dark text-white px-5 py-3 rounded-2xl shadow-xl border border-white/20 flex items-center gap-3 transform translate-y-4 opacity-0 transition-all duration-300 text-xs font-semibold pointer-events-auto`;
+
+      const icon = type === 'success' ? '<i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>' : '<i data-lucide="info" class="w-4 h-4 text-sky-400"></i>';
+      toast.innerHTML = `${icon} <span>${message}</span>`;
+
+      container.appendChild(toast);
+      lucide.createIcons();
+
+      setTimeout(() => toast.classList.remove('translate-y-4', 'opacity-0'), 50);
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-2');
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
+
+    // Products Fetching
+    async function fetchProducts(category = 'All', subcategory = null) {
+      try {
+        let url = `/api/products?category=${category}`;
+        if (subcategory) url += `&subcategory=${subcategory}`;
+        const res = await fetch(url);
+        const data = await res.json();
+        if (data.success) {
+          currentProductsList = data.products || data.listings;
+          showAllProducts = false;
+          renderProducts();
+        }
+      } catch (err) {
+        console.error('Error fetching products:', err);
+      }
+    }
+
+    function renderProducts() {
+      const grid = document.getElementById('product-grid');
+      const viewMoreContainer = document.getElementById('view-more-container');
+      const products = currentProductsList;
+
+      if (!products || products.length === 0) {
+        grid.innerHTML = `<div class="col-span-full text-center py-12 text-zinc-500 font-medium text-sm">No items found in this category.</div>`;
+        if (viewMoreContainer) viewMoreContainer.innerHTML = '';
+        return;
+      }
+
+      const visibleProducts = showAllProducts ? products : products.slice(0, 8);
+
+      grid.innerHTML = visibleProducts.map(product => {
+        const isWishlisted = wishlistSet.has(product.id);
+        const heartColor = isWishlisted ? 'text-red-500 fill-red-500' : 'text-black';
+
+        return `
+          <div class="group cursor-pointer flex flex-col justify-between">
+            <div>
+              <div class="relative aspect-[3/4] rounded-2xl overflow-hidden bg-zinc-200 mb-3">
+                <img src="${product.image}" alt="${product.name}" onclick="openProductPreview('${product.id}')"
+                  class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                <button onclick="event.stopPropagation(); toggleWishlist('${product.id}')" class="absolute top-3 right-3 glass-card p-2 rounded-full hover:scale-110 transition z-10"
+                  aria-label="Add to Wishlist">
+                  <i data-lucide="heart" class="w-4 h-4 ${heartColor}"></i>
+                </button>
+                <span class="absolute bottom-3 left-3 bg-black/60 backdrop-blur-md text-white text-[9px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider pointer-events-none">
+                  ${product.category}
+                </span>
+              </div>
+              <h3 class="text-xs font-bold uppercase tracking-wider line-clamp-1 hover:underline cursor-pointer" onclick="openProductPreview('${product.id}')">${product.name}</h3>
+              <p class="text-xs text-zinc-500 mt-0.5">$${(product.price || product.estimatedValue || 0).toFixed(2)}</p>
+            </div>
+            <button onclick="addToCart('${product.id}')"
+              class="mt-3 w-full bg-black text-white text-[11px] font-bold uppercase tracking-wider py-2.5 rounded-xl hover:bg-zinc-800 transition flex items-center justify-center gap-1.5">
+              <i data-lucide="plus" class="w-3.5 h-3.5"></i> Add To Cart
+            </button>
+          </div>
+        `;
+      }).join('');
+
+      if (viewMoreContainer) {
+        if (!showAllProducts && products.length > 8) {
+          viewMoreContainer.innerHTML = `
+            <div class="text-center w-full flex justify-center mt-2">
+              <button onclick="toggleViewAll()" class="bg-black text-white text-xs font-bold uppercase tracking-wider px-8 py-3 rounded-full hover:bg-zinc-800 transition shadow-lg">
+                View More
+              </button>
+            </div>
+          `;
+        } else if (showAllProducts && products.length > 8) {
+          viewMoreContainer.innerHTML = `
+            <div class="text-center w-full flex justify-center mt-2">
+              <button onclick="toggleViewAll()" class="bg-black text-white text-xs font-bold uppercase tracking-wider px-8 py-3 rounded-full hover:bg-zinc-800 transition shadow-lg">
+                View Less
+              </button>
+            </div>
+          `;
+        } else {
+          viewMoreContainer.innerHTML = '';
+        }
+      }
+
+      lucide.createIcons();
+    }
+
+    function toggleViewAll() {
+      showAllProducts = !showAllProducts;
+      renderProducts();
+      if (!showAllProducts) {
+        document.getElementById('products-section').scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    // Filter Handling
+    function filterCategory(category, subcategory = null) {
+      currentCategory = category;
+      let title = category === 'All' ? 'Best Of Collection' : `${category} Collection`;
+      if (subcategory) title += ` - ${subcategory}`;
+      document.getElementById('current-category-title').innerText = title;
+
+      document.querySelectorAll('.cat-pill').forEach(pill => {
+        if (pill.getAttribute('data-cat') === category) {
+          pill.className = 'cat-pill bg-black text-white px-4 py-1.5 rounded-full text-xs font-bold uppercase transition';
+        } else {
+          pill.className = 'cat-pill bg-zinc-200 text-zinc-700 hover:bg-zinc-300 px-4 py-1.5 rounded-full text-xs font-bold uppercase transition';
+        }
+      });
+
+      document.querySelectorAll('.category-nav-btn').forEach(btn => {
+        if (btn.getAttribute('data-cat') === category) {
+          btn.className = 'category-nav-btn hover:opacity-60 transition text-black font-bold';
+        } else {
+          btn.className = 'category-nav-btn hover:opacity-60 transition text-zinc-500';
+        }
+      });
+
+      fetchProducts(category, subcategory);
+      document.getElementById('products-section').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Cart Operations
+    async function fetchCart() {
+      try {
+        const res = await fetch('/api/cart');
+        const data = await res.json();
+        if (data.success) updateCartUI(data);
+      } catch (err) {
+        console.error('Error fetching cart:', err);
+      }
+    }
+
+    async function addToCart(productId) {
+      try {
+        const res = await fetch('/api/cart', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ productId, quantity: 1 })
+        });
+        const data = await res.json();
+        if (data.success) {
+          updateCartUI(data);
+          showToast(data.message);
+        }
+      } catch (err) {
+        console.error('Error adding to cart:', err);
+      }
+    }
+
+    async function updateQuantity(productId, newQty) {
+      try {
+        const res = await fetch(`/api/cart/${productId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ quantity: newQty })
+        });
+        const data = await res.json();
+        if (data.success) updateCartUI(data);
+      } catch (err) {
+        console.error('Error updating quantity:', err);
+      }
+    }
+
+    async function removeFromCart(productId) {
+      try {
+        const res = await fetch(`/api/cart/${productId}`, { method: 'DELETE' });
+        const data = await res.json();
+        if (data.success) {
+          updateCartUI(data);
+          showToast(data.message, 'info');
+        }
+      } catch (err) {
+        console.error('Error removing item:', err);
+      }
+    }
+
+    function updateCartUI(data) {
+      document.getElementById('cart-badge').innerText = data.itemCount;
+      document.getElementById('cart-subtotal').innerText = `$${data.subtotal}`;
+
+      const container = document.getElementById('cart-items-container');
+      if (data.cart.length === 0) {
+        container.innerHTML = `
+          <div class="h-full flex flex-col items-center justify-center py-16 text-center text-zinc-500 space-y-3">
+            <i data-lucide="shopping-bag" class="w-12 h-12 stroke-1 opacity-40"></i>
+            <p class="text-xs font-semibold uppercase tracking-wider">Your shopping bag is empty</p>
+          </div>
+        `;
+      } else {
+        container.innerHTML = data.cart.map(item => `
+          <div class="flex items-center gap-4 bg-zinc-900 p-3 rounded-2xl border border-zinc-800">
+            <img src="${item.image}" alt="${item.name}" class="w-16 h-20 object-cover rounded-xl bg-zinc-800">
+            <div class="flex-1 min-w-0">
+              <h4 class="text-xs font-bold uppercase tracking-wider truncate">${item.name}</h4>
+              <p class="text-xs text-zinc-400 mt-1">$${(item.price || 0).toFixed(2)}</p>
+              
+              <div class="flex items-center gap-3 mt-2">
+                <div class="flex items-center border border-zinc-700 rounded-lg overflow-hidden bg-zinc-800">
+                  <button onclick="updateQuantity('${item.id}', ${item.quantity - 1})" class="px-2 py-0.5 text-xs text-zinc-400 hover:text-white">-</button>
+                  <span class="px-2 text-xs font-bold">${item.quantity}</span>
+                  <button onclick="updateQuantity('${item.id}', ${item.quantity + 1})" class="px-2 py-0.5 text-xs text-zinc-400 hover:text-white">+</button>
+                </div>
+                <button onclick="removeFromCart('${item.id}')" class="text-zinc-500 hover:text-red-400 transition text-xs">
+                  <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      lucide.createIcons();
+    }
+
+    function toggleCartDrawer() {
+      const drawer = document.getElementById('cart-drawer');
+      const overlay = document.getElementById('cart-drawer-overlay');
+      const isOpen = !drawer.classList.contains('translate-x-full');
+
+      if (isOpen) {
+        drawer.classList.add('translate-x-full');
+        overlay.classList.add('opacity-0', 'pointer-events-none');
+      } else {
+        drawer.classList.remove('translate-x-full');
+        overlay.classList.remove('opacity-0', 'pointer-events-none');
+      }
+    }
+
+    function checkoutCart() {
+      showToast('Redirecting to encrypted checkout...', 'success');
+    }
+
+    // Wishlist Operations
+    async function fetchWishlist() {
+      try {
+        const res = await fetch('/api/wishlist');
+        const data = await res.json();
+        if (data.success) {
+          wishlistSet = new Set(data.items);
+          updateWishlistBadge();
+        }
+      } catch (err) {
+        console.error('Error fetching wishlist:', err);
+      }
+    }
+
+    async function toggleWishlist(productId) {
+      try {
+        const res = await fetch('/api/wishlist/toggle', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ productId })
+        });
+        const data = await res.json();
+        if (data.success) {
+          if (data.isWishlisted) wishlistSet.add(productId);
+          else wishlistSet.delete(productId);
+          updateWishlistBadge();
+          fetchProducts(currentCategory);
+          showToast(data.message, data.isWishlisted ? 'success' : 'info');
+        }
+      } catch (err) {
+        console.error('Error toggling wishlist:', err);
+      }
+    }
+
+    function updateWishlistBadge() {
+      const badge = document.getElementById('wishlist-badge');
+      if (wishlistSet.size > 0) {
+        badge.innerText = wishlistSet.size;
+        badge.classList.remove('hidden');
+        badge.classList.add('flex');
+      } else {
+        badge.classList.add('hidden');
+        badge.classList.remove('flex');
+      }
+    }
+
+    function toggleWishlistDrawer() {
+      showToast(`Wishlist contains ${wishlistSet.size} saved items`, 'info');
+    }
+
+    // Search Operations
+    function openSearchModal() {
+      const modal = document.getElementById('search-modal');
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+      document.getElementById('search-input').focus();
+    }
+
+    function closeSearchModal() {
+      const modal = document.getElementById('search-modal');
+      modal.classList.add('opacity-0', 'pointer-events-none');
+    }
+
+    async function handleSearch(query) {
+      const resultsContainer = document.getElementById('search-results');
+      if (!query.trim()) {
+        resultsContainer.innerHTML = `<p class="text-xs text-zinc-500 text-center py-8">Type above to search archival streetwear & luxury apparel.</p>`;
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/products?search=${encodeURIComponent(query)}`);
+        const data = await res.json();
+        if (data.success) {
+          const items = data.products || data.listings;
+          window.searchResultsList = items;
+          if (items.length === 0) {
+            resultsContainer.innerHTML = `<p class="text-xs text-zinc-400 text-center py-8">No results found for "${query}".</p>`;
+          } else {
+            resultsContainer.innerHTML = items.map(item => `
+              <div class="flex items-center justify-between bg-zinc-800/80 p-3 rounded-2xl border border-zinc-700/50">
+                <div class="flex items-center gap-4 cursor-pointer group" onclick="closeSearchModal(); openProductPreview('${item.id}')">
+                  <img src="${item.image}" alt="${item.name}" class="w-12 h-14 object-cover rounded-xl bg-zinc-900 group-hover:opacity-80 transition">
+                  <div>
+                    <h4 class="text-xs font-bold uppercase tracking-wider group-hover:underline">${item.name}</h4>
+                    <span class="text-[10px] text-zinc-400 uppercase tracking-widest">${item.category} • $${(item.price || 0).toFixed(2)}</span>
+                  </div>
+                </div>
+                <button onclick="addToCart('${item.id}'); closeSearchModal();" class="bg-white text-black text-xs font-bold uppercase px-4 py-2 rounded-xl hover:bg-zinc-200 transition">
+                  Add To Cart
+                </button>
+              </div>
+            `).join('');
+          }
+        }
+      } catch (err) {
+        console.error('Search error:', err);
+      }
+    }
+
+    // Sell Modal Operations
+    function openSellModal() {
+      const modal = document.getElementById('sell-modal');
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+    }
+
+    function closeSellModal() {
+      const modal = document.getElementById('sell-modal');
+      modal.classList.add('opacity-0', 'pointer-events-none');
+    }
+
+    async function submitSellListing(e) {
+      e.preventDefault();
+      const title = document.getElementById('sell-title').value;
+      const category = document.getElementById('sell-category').value;
+      const price = document.getElementById('sell-price').value;
+      const sellerEmail = document.getElementById('sell-email').value;
+      const description = document.getElementById('sell-desc').value;
+
+      try {
+        const res = await fetch('/api/sell', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ title, category, price, sellerEmail, description })
+        });
+        const data = await res.json();
+        if (data.success) {
+          closeSellModal();
+          document.getElementById('sell-form').reset();
+          fetchProducts();
+          showToast(data.message, 'success');
+        }
+      } catch (err) {
+        console.error('Sell submission error:', err);
+      }
+    }
+
+    // Newsletter Operations
+    async function submitNewsletter(e) {
+      e.preventDefault();
+      const emailInput = document.getElementById('newsletter-email');
+      const email = emailInput.value;
+
+      try {
+        const res = await fetch('/api/newsletter', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        });
+        const data = await res.json();
+        if (data.success) {
+          emailInput.value = '';
+          showToast(data.message, 'success');
+        }
+      } catch (err) {
+        console.error('Newsletter error:', err);
+      }
+    }
+
+    // Auth Modal Operations
+    let isSignUp = false;
+    let isLoggedIn = false;
+    let currentUser = '';
+
+    function handleAuthButtonClick() {
+      if (isLoggedIn) {
+        const dropdown = document.getElementById('user-dropdown');
+        if (dropdown.classList.contains('hidden')) {
+          dropdown.classList.remove('hidden', 'pointer-events-none');
+          setTimeout(() => dropdown.classList.remove('opacity-0'), 10);
+        } else {
+          dropdown.classList.add('opacity-0', 'pointer-events-none');
+          setTimeout(() => dropdown.classList.add('hidden'), 200);
+        }
+      } else {
+        openAuthModal();
+      }
+    }
+
+    // Close dropdown if clicking outside
+    document.addEventListener('click', (e) => {
+      const dropdown = document.getElementById('user-dropdown');
+      const authBtn = document.getElementById('auth-btn');
+      if (isLoggedIn && !authBtn.contains(e.target) && !dropdown.contains(e.target)) {
+        dropdown.classList.add('opacity-0', 'pointer-events-none');
+        setTimeout(() => dropdown.classList.add('hidden'), 200);
+      }
+    });
+
+    function confirmLogout() {
+      isLoggedIn = false;
+      currentUser = '';
+      showToast('Logged out successfully', 'info');
+
+      const dropdown = document.getElementById('user-dropdown');
+      dropdown.classList.add('opacity-0', 'pointer-events-none', 'hidden');
+
+      const authBtn = document.getElementById('auth-btn');
+      authBtn.innerHTML = `
+        <i data-lucide="user" class="w-5 h-5"></i>
+        <span class="text-[10px] font-bold uppercase tracking-widest hidden sm:block">Login</span>
+      `;
+      lucide.createIcons();
+    }
+
+    function openAuthModal() {
+      const modal = document.getElementById('auth-modal');
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+    }
+
+    function closeAuthModal() {
+      const modal = document.getElementById('auth-modal');
+      modal.classList.add('opacity-0', 'pointer-events-none');
+    }
+
+    const editorialData = {
+      'style-guide': {
+        title: 'Mastering Proportions',
+        image: './editorial1.png',
+        content: '<p>The modern silhouette is defined by contrast. This season, designers are leaning heavily into the juxtaposition of extreme volumes—pairing oversized, relaxed tops with sharply tailored, slim-fitting trousers, or vice versa.</p><p>By intentionally breaking traditional tailoring rules, these disproportionate fits create a sense of effortless nonchalance while remaining highly curated. Key pieces include dropped-shoulder heavy knits, wide-leg pooled denim, and cropped technical jackets that alter the perceived waistline.</p><p>When mastering proportions, the golden rule is balance: if you go big on top, keep the bottom structured, and always anchor the look with substantial footwear.</p>'
+      },
+      'nylon': {
+        title: 'The Return of Nylon',
+        image: './editorial_model.jpg',
+        content: '<p>Technical fabrics have officially migrated from the mountainside to the runway. Nylon, once reserved purely for utilitarian sportswear and rain gear, is experiencing a massive resurgence in high-end streetwear and luxury collections.</p><p>Modern iterations of nylon ripstop and gabardine are being treated with complex dyeing processes, resulting in iridescent, crinkled, and metallic finishes that elevate the fabric beyond its humble origins.</p><p>We are seeing nylon extensively used in deconstructed outerwear, multi-pocket cargo pants, and hybrid tailored pieces. The appeal lies in its durability, lightweight nature, and the distinct, futuristic sound and texture it brings to a layered outfit.</p>'
+      }
+    };
+
+    function openEditorialModal(id) {
+      const modal = document.getElementById('editorial-modal');
+      const data = editorialData[id];
+      if (data) {
+        document.getElementById('editorial-modal-title').innerText = data.title;
+        document.getElementById('editorial-modal-img').src = data.image;
+        document.getElementById('editorial-modal-content').innerHTML = data.content;
+      }
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+    }
+
+    function closeEditorialModal() {
+      const modal = document.getElementById('editorial-modal');
+      modal.classList.add('opacity-0', 'pointer-events-none');
+    }
+
+    function toggleAuthMode() {
+      isSignUp = !isSignUp;
+      document.getElementById('auth-title').innerText = isSignUp ? 'Create Account' : 'Welcome Back';
+      document.getElementById('auth-submit-btn').innerText = isSignUp ? 'Sign Up' : 'Login';
+      document.getElementById('auth-toggle-text').innerText = isSignUp ? 'Already have an account?' : "Don't have an account?";
+      document.getElementById('auth-toggle-btn').innerText = isSignUp ? 'Login' : 'Sign Up';
+
+      // Toggle Name Input visibility and required attribute
+      const nameContainer = document.getElementById('name-input-container');
+      const nameInput = document.getElementById('auth-name');
+      if (isSignUp) {
+        nameContainer.classList.remove('hidden');
+        nameInput.setAttribute('required', 'true');
+      } else {
+        nameContainer.classList.add('hidden');
+        nameInput.removeAttribute('required');
+      }
+    }
+
+    async function submitAuth(e) {
+      e.preventDefault();
+      const email = document.getElementById('auth-email').value;
+      const password = document.getElementById('auth-password').value;
+      const banner = document.getElementById('auth-error-banner');
+
+      if (isSignUp) {
+        const name = document.getElementById('auth-name').value;
+        // Validate password strength only on sign-up
+        const strongPwd = /^(?=.*[!@#$%^&*_=+\-]).{8,}$/.test(password);
+        if (!strongPwd) {
+          banner.querySelector('p.font-bold').innerText = 'Weak password.';
+          banner.querySelector('p.mt-0\\.5').innerHTML = 'Must be 8+ characters with at least one special character (e.g. !, @, #).';
+          banner.classList.remove('hidden');
+          lucide.createIcons();
+          return;
+        }
+
+        const res = await fetch('/api/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, name, password })
+        });
+        const data = await res.json();
+        if (!data.success) {
+          banner.querySelector('p.font-bold').innerText = 'Registration failed.';
+          banner.querySelector('p.mt-0\\.5').innerHTML = data.message;
+          banner.classList.remove('hidden');
+          lucide.createIcons();
+          return;
+        }
+        currentUser = data.name;
+      } else {
+        const res = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+        if (!data.success) {
+          banner.querySelector('p.font-bold').innerText = "Account doesn't exist.";
+          banner.querySelector('p.mt-0\\.5').innerHTML = data.message + ' <button type="button" onclick="document.getElementById(\'auth-error-banner\').classList.add(\'hidden\'); toggleAuthMode()" class="underline font-bold text-white hover:text-zinc-200">Create an Account</button>';
+          banner.classList.remove('hidden');
+          lucide.createIcons();
+          return;
+        }
+        currentUser = data.name;
+      }
+
+      banner.classList.add('hidden');
+      isLoggedIn = true;
+      closeAuthModal();
+      showToast(isSignUp ? 'Account created successfully!' : 'Logged in successfully!', 'success');
+
+      // Update UI state
+      const authBtn = document.getElementById('auth-btn');
+      authBtn.innerHTML = `
+        <i data-lucide="user-check" class="w-5 h-5 text-emerald-400"></i>
+        <span class="text-[10px] font-bold uppercase tracking-widest hidden sm:block">${currentUser}</span>
+      `;
+      lucide.createIcons();
+    }
+
+    function openProductPreview(productId) {
+      let product = currentProductsList.find(p => p.id === productId);
+      if (!product && window.searchResultsList) {
+        product = window.searchResultsList.find(p => p.id === productId);
+      }
+      if (!product) return;
+
+      const modal = document.getElementById('product-preview-modal');
+
+      document.getElementById('preview-img').src = product.image;
+      document.getElementById('preview-img').alt = product.name;
+      document.getElementById('preview-category').innerText = product.category;
+      document.getElementById('preview-title').innerText = product.name;
+      document.getElementById('preview-price').innerText = `$${(product.price || product.estimatedValue || 0).toFixed(2)}`;
+
+      // Update description with a fallback if empty
+      const descEl = document.getElementById('preview-desc');
+      descEl.innerText = product.description || "Experience premium quality and timeless style. This piece features elevated construction with attention to detail.";
+
+      // Reset size to 'M'
+      const sizeContainer = document.getElementById('preview-size-container');
+      if (sizeContainer) {
+        const buttons = sizeContainer.querySelectorAll('.size-btn');
+        if (buttons.length >= 2) selectSize(buttons[1]);
+      }
+
+      const addBtn = document.getElementById('preview-add-cart-btn');
+      addBtn.onclick = () => {
+        addToCart(product.id);
+        closeProductPreview();
+      };
+
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+    }
+
+    function closeProductPreview() {
+      const modal = document.getElementById('product-preview-modal');
+      modal.classList.add('opacity-0', 'pointer-events-none');
+    }
+
+    function selectSize(btn) {
+      // Get all size buttons
+      const container = document.getElementById('preview-size-container');
+      const buttons = container.querySelectorAll('.size-btn');
+
+      // Reset all buttons to default inactive state
+      buttons.forEach(b => {
+        b.className = 'size-btn w-10 h-10 rounded-full border border-zinc-700 flex items-center justify-center text-xs font-bold hover:border-white transition';
+      });
+
+      // Set the clicked button to active state
+      btn.className = 'size-btn w-10 h-10 rounded-full border border-white bg-white text-black flex items-center justify-center text-xs font-bold transition';
+    }
+  </script>
+</body>
+
+</html>
