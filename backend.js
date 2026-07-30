@@ -256,6 +256,20 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname)));
 
+// Vercel Serverless Database Connection Middleware
+let isDbConnected = false;
+app.use(async (req, res, next) => {
+  if (!isDbConnected) {
+    try {
+      await mongoose.connect(process.env.MONGODB_URI);
+      isDbConnected = true;
+    } catch (err) {
+      console.error('Failed to connect to MongoDB in Serverless context:', err);
+    }
+  }
+  next();
+});
+
 // ==========================================
 // API ROUTES
 // ==========================================
@@ -366,14 +380,19 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'frontend.html'));
 });
 
-// Start Express Server
-initDB().then(() => {
-  app.listen(PORT, () => {
-    console.log(`================================================`);
-    console.log(`  ARCHIVE Backend Running on MongoDB!`);
-    console.log(`  URL: http://localhost:${PORT}`);
-    console.log(`================================================`);
+// Start Express Server (Local Development)
+if (process.env.NODE_ENV !== 'production') {
+  initDB().then(() => {
+    app.listen(PORT, () => {
+      console.log(`================================================`);
+      console.log(`  ARCHIVE Backend Running on MongoDB!`);
+      console.log(`  URL: http://localhost:${PORT}`);
+      console.log(`================================================`);
+    });
+  }).catch(err => {
+    console.error('Failed to connect to MongoDB:', err.message);
   });
-}).catch(err => {
-  console.error('Failed to connect to MongoDB:', err.message);
-});
+}
+
+// Export for Vercel Serverless Functions
+module.exports = app;
