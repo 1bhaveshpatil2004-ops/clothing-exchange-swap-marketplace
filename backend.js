@@ -95,10 +95,10 @@ async function initDB() {
   await mongoose.connect(process.env.MONGODB_URI);
   console.log('Connected to MongoDB Atlas successfully.');
 
-  // Always re-seed products with correct image paths
-  await Product.deleteMany({});
+  // Only delete official products (preserve user-created listings)
+  await Product.deleteMany({ isSellerListing: { $ne: true } });
   await Product.insertMany(initialProducts);
-  console.log('Seeded products with correct image paths.');
+  console.log('Seeded official products and preserved user listings.');
 
   // Seed categories if empty
   await Category.deleteMany({});
