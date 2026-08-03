@@ -313,9 +313,10 @@
     <section
       class="relative min-h-[450px] lg:min-h-[400px] rounded-3xl overflow-hidden bg-black text-white flex items-center px-8 lg:px-16 shadow-2xl">
 
-      <video id="hero-bg-video" autoplay loop muted playsinline webkit-playsinline
-        class="absolute inset-0 w-full h-full object-cover opacity-80 pointer-events-none z-0">
-        <source src="./all photos/hero-video.mp4" type="video/mp4">
+      <video id="hero-bg-video" autoplay loop muted playsinline webkit-playsinline preload="auto"
+        class="absolute inset-0 w-full h-full object-cover opacity-80 pointer-events-none z-0"
+        poster="./all%20photos/editorial1.png">
+        <source src="./all%20photos/hero-video.mp4" type="video/mp4">
         Your browser does not support the video tag.
       </video>
 
@@ -1558,29 +1559,68 @@
       btn.className = 'size-btn w-10 h-10 rounded-full border border-white bg-white text-black flex items-center justify-center text-xs font-bold transition';
     }
 
-    // --- Fix for Background Video randomly pausing ---
+    // --- Fix for Background Video randomly pausing / not loading ---
     document.addEventListener('DOMContentLoaded', () => {
       const bgVideo = document.getElementById('hero-bg-video');
-      if (bgVideo) {
-        // 1. If the browser pauses the video, attempt to resume it
-        bgVideo.addEventListener('pause', () => {
-          bgVideo.play().catch(e => console.log('Video autoplay prevented:', e));
-        });
-        
-        // 2. Resume video when user comes back to this tab
-        document.addEventListener('visibilitychange', () => {
-          if (document.visibilityState === 'visible' && bgVideo.paused) {
-            bgVideo.play().catch(e => console.log('Video play prevented on tab switch:', e));
-          }
-        });
+      if (!bgVideo) return;
 
-        // 3. Ensure video plays on first user interaction
-        document.body.addEventListener('click', () => {
-          if (bgVideo.paused) {
-            bgVideo.play().catch(e => console.log('Video play prevented:', e));
-          }
-        }, { once: true });
+      let retryCount = 0;
+      const MAX_RETRIES = 3;
+
+      function tryPlay() {
+        bgVideo.play().catch(e => console.log('Video autoplay prevented:', e));
       }
+
+      function reloadAndPlay() {
+        if (retryCount >= MAX_RETRIES) {
+          console.log('Video failed to load after retries — showing poster.');
+          return;
+        }
+        retryCount++;
+        console.log(`Retrying video load (attempt ${retryCount})...`);
+        const src = bgVideo.querySelector('source').src;
+        bgVideo.querySelector('source').src = src + '?retry=' + retryCount;
+        bgVideo.load();
+        setTimeout(() => { tryPlay(); }, 500);
+      }
+
+      // 1. Handle video load errors — retry
+      bgVideo.addEventListener('error', () => {
+        console.log('Video error — retrying...');
+        reloadAndPlay();
+      });
+
+      bgVideo.querySelector('source').addEventListener('error', () => {
+        console.log('Video source error — retrying...');
+        reloadAndPlay();
+      });
+
+      // 2. Handle network stalls (video stuck buffering)
+      bgVideo.addEventListener('stalled', () => {
+        console.log('Video stalled — retrying...');
+        setTimeout(() => {
+          if (bgVideo.paused || bgVideo.readyState < 3) reloadAndPlay();
+        }, 3000);
+      });
+
+      // 3. If the browser pauses the video, attempt to resume it
+      bgVideo.addEventListener('pause', () => { tryPlay(); });
+
+      // 4. Resume video when user comes back to this tab
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible' && bgVideo.paused) tryPlay();
+      });
+
+      // 5. Ensure video plays on first user interaction (needed on some mobile browsers)
+      document.body.addEventListener('click', () => {
+        if (bgVideo.paused) tryPlay();
+      }, { once: true });
+
+      // 6. Start playing as soon as enough data is loaded
+      bgVideo.addEventListener('canplay', () => {
+        retryCount = 0; // reset retries on successful load
+        tryPlay();
+      });
     });
   </script>
 </body>
